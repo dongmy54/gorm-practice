@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 
 	"gorm_practice/models"
@@ -46,11 +45,36 @@ func main() {
 	// 	Data: jsonData,
 	// })
 
-	var user models.User
-	db.Last(&user)
-	var dataSlice []string
-	if err := json.Unmarshal(user.Data, &dataSlice); err != nil {
-		log.Printf("failed to unmarshal data: %v", err)
+	// var user models.User
+	// db.Last(&user)
+	// var dataSlice []string
+	// if err := json.Unmarshal(user.Data, &dataSlice); err != nil {
+	// 	log.Printf("failed to unmarshal data: %v", err)
+	// }
+	// log.Printf("User: %#v", dataSlice)
+
+	//results := []models.User{}
+	// start_time := time.Now().AddDate(0, 0, -10)
+	// fmt.Println(start_time)
+
+	// res := db.Model(models.User{}).Unscoped().Limit(10).FindInBatches(&results, 1, func(tx *gorm.DB, batch int) error {
+	// 	for _, v := range results {
+	// 		log.Printf("user: %#v\n", v.DeletedAt)
+	// 	}
+	// 	log.Printf("batch %d\n", batch)
+	// 	return nil
+	// })
+
+	// fmt.Printf("res: %#v\n", res)
+
+	results1 := []*models.User{}
+	for _, phoneNum := range []string{"123456789", "987654321", "123456789", "987654321"} {
+		results1 = append(results1, &models.User{
+			Name:     "John Doe",
+			PhoneNum: phoneNum,
+		})
 	}
-	log.Printf("User: %#v", dataSlice)
+	models.BatchCreate1(db, results1)
+
+	models.BatchOperation(db)
 }
